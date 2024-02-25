@@ -11,6 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn import tree
 from sklearn.feature_extraction.text import HashingVectorizer, TfidfTransformer
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 import xgboost
@@ -53,5 +54,16 @@ text_clf = Pipeline([('vect', HashingVectorizer(input='content', ngram_range=(1,
 
 text_clf.fit(X_train, y_train)
 
+# Support Vector Classifier
+svm = SVC(kernel='linear', C=1.0, random_state=0)
+svm.fit(X_train, y_train)
+
+y_pred = svm.predict(X_test)
+
+
 # Evaluate 
 print(text_clf.score(X_train,y_train))
+
+
+print(f'Missclassified samples: {(y_test != y_pred).sum()}')
+print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))

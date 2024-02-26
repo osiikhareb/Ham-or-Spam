@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Spam Filtering using the Spamassasinpublic dataset
-Classification using Rsndom Forrest and XGBoost
+Classification using Support Vector Machines, Random Forest, and XGBoost
 
 @author: Osi
 """
@@ -46,19 +46,26 @@ for filesPath,label in file_types_and_labels:
 X_train, X_test, y_train, y_test = train_test_split(corpus, labels, test_size=0.33, random_state=42)
 
 
-# Train NLP pipeline on the training data
-text_clf = Pipeline([('vect', HashingVectorizer(input='content', ngram_range=(1, 3))),('tfidf', TfidfTransformer(use_idf=True, )),('rf',RandomForestClassifier(class_weight='balanced')),])
-
-# Classification with XGBoost
-#text_clf = Pipeline([('vect', HashingVectorizer(input='content', ngram_range=(1, 3))),('tfidf', TfidfTransformer(use_idf=True, )),('rf',XGBClassifier(class_weight='balanced')),])
-
-text_clf.fit(X_train, y_train)
-
-# Support Vector Classifier
+## Support Vector Classifier
 svm = SVC(kernel='linear', C=1.0, random_state=0)
 svm.fit(X_train, y_train)
 
 y_pred = svm.predict(X_test)
+
+
+
+## Random Forest Classifier
+# Train NLP pipeline on the training data
+text_clf = Pipeline([('vect', HashingVectorizer(input='content', ngram_range=(1, 3))),('tfidf', TfidfTransformer(use_idf=True, )),('rf',RandomForestClassifier(class_weight='balanced')),])
+
+
+
+## XGBoost Classification
+'''Further/more extensive implementation required using GPU'''
+#text_clf = Pipeline([('vect', HashingVectorizer(input='content', ngram_range=(1, 3))),('tfidf', TfidfTransformer(use_idf=True, )),('rf',XGBClassifier(class_weight='balanced')),])
+#text_clf.fit(X_train, y_train)
+
+
 
 
 # Evaluate 
